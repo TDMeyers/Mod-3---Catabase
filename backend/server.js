@@ -18,6 +18,10 @@ const connectDB = require('./config')
 // Connect to the database
 connectDB()
 
+
+
+const { authorize } = require('./middleware/authMiddleware')
+
 app.use(express.json())
 app.use(cors())
 
