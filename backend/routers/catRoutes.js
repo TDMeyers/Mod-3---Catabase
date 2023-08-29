@@ -6,22 +6,22 @@ const catControl = require('../controllers/catController')
 
 const { authorize } = require('../middleware/authMiddleware')
 
-// seed 
-router.post('/seed', catControl.seed)
+// // seed 
+// router.post('/seed', catControl.seed)
 
 // index
 router.get('/', catControl.index)
 
-// delete
-router.delete('/:id', authorize, catControl.delete)
+// // delete
+// router.delete('/:id', authorize, catControl.delete)
 
-// update
-router.put('/:id', authorize, catControl.update)
+// // update
+// router.put('/:id', authorize, catControl.update)
 
-// create
-router.post('/', authorize, catControl.create)
+// // create
+// router.post('/', authorize, catControl.create)
 
-// show
-router.get('/:id', catControl.show)
+// // show
+// router.get('/:id', catControl.show)
 
 module.exports = router
