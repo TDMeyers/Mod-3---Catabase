@@ -32,7 +32,7 @@ app.use(cors())
 // Define paths, middleware, and routers
 app.use('/api/landing', catRoutes)
 app.use('/api/users', authorize, userRoutes)
-app.use('auth', authRoutes)
+app.use('/auth', authRoutes)
 
 // Listen to the configured port
 app.listen(PORT, () => {

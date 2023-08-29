@@ -1,7 +1,9 @@
 import axios from "../api";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addUser } from "../redux/userSlice";
 
 let emptyForm = {
     username: '',
@@ -9,7 +11,8 @@ let emptyForm = {
     email: ''
 }
 
-function Register({ setUser }) {
+function Register() {
+    const dispatch = useDispatch()
 
     const navigate = useNavigate()
 
@@ -39,9 +42,10 @@ function Register({ setUser }) {
                 }
             })
 
-            setUser(userResponse.data)
 
-            navigate('/posts')
+            dispatch(addUser(userResponse.data))
+
+            navigate('/login')
 
         } catch (err) {
 
@@ -50,44 +54,53 @@ function Register({ setUser }) {
 
         }
     }
+    const [showAnimation, setShowAnimation] = useState(false);
+
+    useEffect(() => {
+        // This effect will run after the component is mounted
+        setShowAnimation(true);
+    }, []);
 
     return (
-        <>
-            <h1>Register</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlFor="username">Username:</label>
-                <br />
-                <input
-                    type="text"
-                    id="username"
-                    name="username"
-                    onChange={handleChange}
-                    value={form.username}
-                />
-                <br /><br />
-                <label htmlFor="email">Email:</label>
-                <br />
-                <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    onChange={handleChange}
-                    value={form.email}
-                />
-                <br /><br />
-                <label htmlFor="password">Password:</label>
-                <br />
-                <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    onChange={handleChange}
-                    value={form.password}
-                />
-                <br /><br />
-                <button>Submit</button>
-            </form>
-        </>
+        <div className="body">
+            <div>
+                    <h1>Hello, There!</h1>
+                    <p>Don't have an account? Sign Up Free</p>
+                </div>
+            <div >
+                <div className="form-container sign-up-container">
+                    <form onSubmit={handleSubmit}>
+                        <>Create Account </> <br />
+                        <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            onChange={handleChange}
+                            value={form.username}
+                            placeholder="Name"
+                        /> <br />
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            onChange={handleChange}
+                            value={form.email}
+                            placeholder="Email"
+                        /> <br />
+                        <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            onChange={handleChange}
+                            value={form.password}
+                            placeholder="Password"
+                        /><br /><br />
+                        <button>Sign Up</button>
+                    </form>
+                </div>
+                
+            </div>
+        </div>
     );
 }
 
