@@ -10,6 +10,8 @@ import Register from './pages/Register'
 import Login from './pages/Login'
 import Profile from './pages/Profile'
 
+import Navbar from './components/Navbar';
+
 import axios from './api'
 import { addUser } from './redux/userSlice';
 
@@ -41,22 +43,17 @@ function App() {
   }
 
   useEffect(() => {
-
     let token = localStorage.getItem("token")
-
-
-
     if (token) {
       getUser()
     } else {
       setIsLoading(false)
     }
-
   }, [])
 
   return (
     <div className="App">
-      {/* <Navbar /> */}
+      <Navbar />
       <Routes>
         <Route path='/' element={<Navigate to='/cats' />} />
         {/* <Route path='/cats' element={<Main />} /> */}
