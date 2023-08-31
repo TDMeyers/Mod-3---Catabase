@@ -5,42 +5,53 @@ import axios from '../../api'
 
 function Index({ user }) {
 
-    const [cats, setcats] = useState([])
+    const [cats, setCats] = useState([])
 
     const navigate = useNavigate()
 
-    async function getcats() {
+    const url = `https://api.thecatapi.com/v1/breeds`;
+
+    let storedBreeds = []
+
+    async function getBreeds() {
         try {
             console.log('v1.00')
-            const response = await axios.get('/api/cats')
-            setcats(response.data)
-        } catch(err) {
+            const response = await axios.get(url,
+                {
+                    headers: { "X-Api-Key": import.meta.env.VITE_APP_THE_CAT_API }
+                }
+            );
+            storedBreeds = response.data.filter(img => img.image?.url = null)
+
+            setCats(storedBreeds)
+
+        } catch (err) {
             console.log(err)
         }
     }
 
     useEffect(() => {
-        getcats()
+        getBreeds()
     }, [])
 
     return (
-            <>
-                <h1>Index View</h1>
-                <div id="cats">
+        <>
+            <h1>Cats! Cats! Cats!</h1>
+            <div id="cats">
 
-                        {cats.map((cat, index) => 
-                            <div className="a-cat" key={index}>
-                                <Link to={`/cats/${cat._id}`}>{cat.subject}</Link>
-                            </div>
-                        )}
-            
-             
-                    {user && 
-                        <button onClick={() => navigate('/cats/new')}>NEW cat</button>
-                    }
-               
-                </div>
-            </>
+                {cats.map((cat) =>
+                    <div className="a-cat" key={cat.id}>
+                        <Link to={`/cats/${cat._id}`}>{cat.subject}</Link>
+                    </div>
+                )}
+
+
+                {user &&
+                    <button onClick={() => navigate('/cats/new')}>NEW cat</button>
+                }
+
+            </div>
+        </>
     )
 }
 
