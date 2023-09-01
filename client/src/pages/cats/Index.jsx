@@ -14,9 +14,6 @@ function Index({ user }) {
     async function getBreeds() {
 
         const breedsUrl = `https://api.thecatapi.com/v1/breeds`;
-
-        
-
         try {
             console.log('v1.00')
             const response = await axios.get(breedsUrl,
@@ -32,51 +29,59 @@ function Index({ user }) {
         }
     }
 
-    async function getPics({obj}) {
+    async function getPics(obj) {
 
-        const picsUrl = 'https://api.thecatapi.com/v1/images/search';
-
-        const filteredPics = [{obj}]
+        const picUrl = `https://api.thecatapi.com/v1/images/${obj.reference_image_id}?size=medium`;
 
         try {
             console.log('v1.00')
-            const filteredPics = await axios.get(picsUrl,
+            const response = await axios.get(picUrl,
                 {
                     headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API }
                 }
             );
 
-            console.log(filteredPics)
+            const newPic = response.data
+            setPics((prevPics) => [...prevPics, newPic])
         } catch (err) {
             console.log(err)
         }
-
-        console.log(filteredPics)
-        setPics(filteredPics)
     }
 
     useEffect(() => {
-        getBreeds()
-    }, [])
+        getBreeds();
+    }, []);
+
+    useEffect(() => {
+        // Loop through the breeds and fetch pics for each breed
+        breeds.forEach((breed) => {
+            getPics(breed);
+        });
+    }, [breeds]);
 
     return (
         <>
             <h1>Cats! Cats! Cats!</h1>
             <div id="cats">
-                {breeds.map((breed) =>
-                    <div className="each-breed" key={breed.id}>
-                        <h3>{breed.name}</h3>
-                        <img src={} />
-                    </div>
+                {pics === null ? (
+                    <p>Loading...</p>
+                ) : (
+                    pics.map((pic) => (
+                        <div className="each-breed" key={pic.id}>
+                            <h3>{pic.name}</h3>
+                            <div className="image">
+                                <img src={pic.url} alt={pic.name} />
+                            </div>
+                        </div>
+                    ))
                 )}
 
                 {/* {user &&
-                    <button onClick={() => navigate('/cats/new')}>NEW cat</button>
-                } */}
-
+                <button onClick={() => navigate('/cats/new')}>NEW cat</button>
+            } */}
             </div>
         </>
-    )
+    );
 }
 
 export default Index
