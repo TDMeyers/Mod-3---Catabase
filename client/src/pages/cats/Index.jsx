@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import { useNavigate, Link } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 import axios from '../../api'
 
@@ -21,7 +21,7 @@ function Index({ user }) {
                     headers: { "X-Api-Key": import.meta.env.VITE_APP_THE_CAT_API }
                 }
             );
-            storedBreeds = response.data.filter(img => img.image?.url = null)
+            storedBreeds = response.data.filter(img => img.image?.url != null)
 
             setCats(storedBreeds)
 
@@ -41,8 +41,8 @@ function Index({ user }) {
 
                 {cats.map((cat) =>
                     <div className="a-cat" key={cat.id}>
-                        <Link to={`/cats/${cat._id}`}>{cat.subject}</Link>
-                    </div>
+                        <img src={cat.vetstreet_url} alt="" />
+                        </div>
                 )}
 
 

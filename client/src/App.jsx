@@ -56,7 +56,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path='/' element={<Navigate to='/cats' />} />
-        {/* <Route path='/cats' element={<Main />} /> */}
+        <Route path='/cats' element={<IndexCat />} />
         {/* <Route path='/cats/:id' element={<ShowCat />} /> */}
 
         {user?.username ? <>
