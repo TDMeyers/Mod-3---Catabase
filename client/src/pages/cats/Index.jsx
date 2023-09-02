@@ -31,7 +31,7 @@ function Index({ user }) {
 
     async function getPics(obj) {
 
-        const picUrl = `https://api.thecatapi.com/v1/images/${obj.reference_image_id}?size=medium`;
+        const picUrl = `https://api.thecatapi.com/v1/images/${obj.reference_image_id}?size=thumb`;
 
         try {
             console.log('v1.00')
@@ -63,14 +63,20 @@ function Index({ user }) {
         <>
             <h1>Cats! Cats! Cats!</h1>
             <div id="cats">
-                {pics === null ? (
+                {pics === [] ? (
                     <p>Loading...</p>
                 ) : (
-                    pics.map((pic) => (
-                        <div className="each-breed" key={pic.id}>
-                            <h3>{pic.name}</h3>
-                            <div className="image">
+                    pics.map((pic, index) => (
+                        <div className="breed-card" key={index}>
+                            <h3>{pic.breeds[0].name}</h3>
+                            {/* {console.log(pic)} */}
+                            <div className="breed-image">
                                 <img src={pic.url} alt={pic.name} />
+                            </div>
+                            <div className="breed-body">
+                                <p>{pic.breeds[0].description}</p>
+                                <p>{pic.breeds[0].life_span} years</p>
+                                <p>{pic.breeds[0].weight.imperial} lbs</p>
                             </div>
                         </div>
                     ))
