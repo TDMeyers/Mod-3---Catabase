@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useSelector, useDispatch } from "react-redux";
 
-
 import './styles/App.css'
 
 import IndexCat from "./pages/cats/Index"
@@ -41,6 +40,24 @@ function App() {
     }
     setIsLoading(false)
   }
+
+async function getBreeds() {
+
+    const breedsUrl = `https://api.thecatapi.com/v1/breeds`;
+    try {
+        // console.log('v1.00')
+        const response = await axios.get(breedsUrl,
+            {
+                headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API }
+            }
+        );
+        console.log(response.data)
+        setBreeds(response.data)
+
+    } catch (err) {
+        console.log(err)
+    }
+}
 
   useEffect(() => {
     let token = localStorage.getItem("token")
