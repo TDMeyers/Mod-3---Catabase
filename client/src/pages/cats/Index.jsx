@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { fetchBreeds, fetchPics } from './actions';
 
 import axios from '../../api'
 
@@ -12,43 +11,43 @@ function Index({ user }) {
 
     const navigate = useNavigate()
 
-    // async function getBreeds() {
+    async function getBreeds() {
 
-    //     const breedsUrl = `https://api.thecatapi.com/v1/breeds`;
-    //     try {
-    //         // console.log('v1.00')
-    //         const response = await axios.get(breedsUrl,
-    //             {
-    //                 headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API }
-    //             }
-    //         );
-    //         console.log(response.data)
-    //         setBreeds(response.data)
+        const breedsUrl = `https://api.thecatapi.com/v1/breeds`;
+        try {
+            // console.log('v1.00')
+            const response = await axios.get(breedsUrl,
+                {
+                    headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API }
+                }
+            );
+            console.log(response.data)
+            setBreeds(response.data)
 
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
-    // async function getPics(obj) {
+    async function getPics(obj) {
 
-    //     const picUrl = `https://api.thecatapi.com/v1/images/${obj.reference_image_id}?size=thumb`;
+        const picUrl = `https://api.thecatapi.com/v1/images/${obj.reference_image_id}?size=thumb`;
 
-    //     try {
-    //         // console.log('v1.00')
-    //         const response = await axios.get(picUrl,
-    //             {
-    //                 headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API }
-    //             }
-    //         );
+        try {
+            // console.log('v1.00')
+            const response = await axios.get(picUrl,
+                {
+                    headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API }
+                }
+            );
 
-    //         const newPic = response.data
-    //         // console.log(response.data)
-    //         setPics((prevPics) => [...prevPics, newPic])
-    //     } catch (err) {
-    //         console.log(err)
-    //     }
-    // }
+            const newPic = response.data
+            // console.log(response.data)
+            setPics((prevPics) => [...prevPics, newPic])
+        } catch (err) {
+            console.log(err)
+        }
+    }
 
     async function handleSaveBreed(breedID) {
         // Send a POST request to save the breed
@@ -65,16 +64,16 @@ function Index({ user }) {
     }
 
     useEffect(() => {
-        fetchBreeds();
-    }, [fetchBreeds]);
+        getBreeds();
+    }, []);
 
     useEffect(() => {
         // Loop through the breeds and fetch pics for each breed
         breeds.forEach((breed) => {
-            fetchPics(breed);
+            getPics(breed);
             // console.log(breed)
         });
-    }, [breeds, fetchPics]);
+    }, [breeds]);
 
     return (
         <>
