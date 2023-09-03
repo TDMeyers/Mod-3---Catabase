@@ -2,9 +2,12 @@ const Users = require("../models/userModel");
 const Breeds = require("../models/breedModels");
 
 module.exports.index = async (req, res) => {
+  const userId = req.username
+  console.log(req, req.username)
   try {
-    const breeds = await Breeds.find().sort({ createdAt: 1 });
+    const breeds = await Breeds.find({ user: userId}).sort({ createdAt: 1 });
     res.status(200).json(breeds);
+    console.log(breeds)
   } catch (err) {
     console.log(err.message);
     res.status(400).json({ error: err.message });

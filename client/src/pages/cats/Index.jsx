@@ -79,7 +79,7 @@ function Index({ user }) {
         <>
             <h1>Cats! Cats! Cats!</h1>
             <div id="cats">
-                {pics === null ? (
+                {pics === 0 ? (
                     <p>Loading...</p>
                 ) : (
                     pics.map((pic, index) => (
