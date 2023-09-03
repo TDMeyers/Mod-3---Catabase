@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { addUser } from "../../redux/userSlice";
 
 export default function Profile({ user }) {
     const { username, image, email } = user

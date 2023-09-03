@@ -13,6 +13,6 @@ const breedSchema = new Schema ({
 },
 })
 
-const Breed = mongoose.model('breeds', breedSchema)
+const Breeds = mongoose.model('breeds', breedSchema)
 
-module.exports = Breed
+module.exports = Breeds

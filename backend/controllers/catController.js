@@ -18,9 +18,9 @@ module.exports.create = async (req, res) => {
     const { breedID } = req.body;
 
     // create a new favorited breed document
-    const newBreed = new Breed({
+    const newBreed = new Breeds({
       breed: breedID,
-      user: req.user.id,
+      user: req.username,
     });
 
     // Save the favorited breed to the database
