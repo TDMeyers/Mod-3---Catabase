@@ -15,7 +15,7 @@ function Index({ user }) {
 
         const breedsUrl = `https://api.thecatapi.com/v1/breeds`;
         try {
-            console.log('v1.00')
+            // console.log('v1.00')
             const response = await axios.get(breedsUrl,
                 {
                     headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API }
@@ -34,7 +34,7 @@ function Index({ user }) {
         const picUrl = `https://api.thecatapi.com/v1/images/${obj.reference_image_id}?size=thumb`;
 
         try {
-            console.log('v1.00')
+            // console.log('v1.00')
             const response = await axios.get(picUrl,
                 {
                     headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API }
@@ -42,9 +42,24 @@ function Index({ user }) {
             );
 
             const newPic = response.data
+            // console.log(response.data)
             setPics((prevPics) => [...prevPics, newPic])
         } catch (err) {
             console.log(err)
+        }
+    }
+
+    async function handleSaveBreed(breedID) {
+        // Send a POST request to save the breed
+        try {
+            const response = await axios.post('/api/cats', { breedID }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            console.log('Breed saved:', response.data);
+        } catch (error) {
+            console.error('Error saving breed:', error);
         }
     }
 
@@ -56,6 +71,7 @@ function Index({ user }) {
         // Loop through the breeds and fetch pics for each breed
         breeds.forEach((breed) => {
             getPics(breed);
+            // console.log(breed)
         });
     }, [breeds]);
 
@@ -63,13 +79,13 @@ function Index({ user }) {
         <>
             <h1>Cats! Cats! Cats!</h1>
             <div id="cats">
-                {pics === [] ? (
+                {pics === null ? (
                     <p>Loading...</p>
                 ) : (
                     pics.map((pic, index) => (
                         <div className="breed-card" key={index}>
+                            {console.log(pics)}
                             <h3>{pic.breeds[0].name}</h3>
-                            {/* {console.log(pic)} */}
                             <div className="breed-image">
                                 <img src={pic.url} alt={pic.name} />
                             </div>
@@ -78,13 +94,10 @@ function Index({ user }) {
                                 <p>{pic.breeds[0].life_span} years</p>
                                 <p>{pic.breeds[0].weight.imperial} lbs</p>
                             </div>
+                            <button onClick={() => handleSaveBreed(`${pic.breeds[0].id}`)}>Save to Profile</button>
                         </div>
                     ))
                 )}
-
-                {/* {user &&
-                <button onClick={() => navigate('/cats/new')}>NEW cat</button>
-            } */}
             </div>
         </>
     );

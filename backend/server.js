@@ -30,7 +30,7 @@ app.use(express.json())
 app.use(cors())
 
 // Define paths, middleware, and routers
-app.use('/api/landing', catRoutes)
+app.use('/api/cats', catRoutes)
 app.use('/api/users', authorize, userRoutes)
 app.use('/auth', authRoutes)
 

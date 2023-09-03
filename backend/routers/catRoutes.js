@@ -12,16 +12,16 @@ const { authorize } = require('../middleware/authMiddleware')
 // index
 router.get('/', catControl.index)
 
-// delete
+//delete
 // router.delete('/:id', authorize, catControl.delete)
 
 // update
 // router.put('/:id', authorize, catControl.update)
 
 // create
-// router.post('/', authorize, catControl.create)
+router.post('/', authorize, catControl.create)
 
-//  show
+// show
 // router.get('/:id', catControl.show)
 
 module.exports = router
