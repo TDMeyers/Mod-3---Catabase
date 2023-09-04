@@ -102,6 +102,7 @@ export default function Profile() {
                     <div className="fav-card">
                         {favsInfo.map((fav, index) => (
                             <div className="a-cat" key={index}>
+                                {console.log(favsInfo)}
                                 <div className="fav-image">
                                     <img src={fav.url} alt={fav.id} />
                                 </div>

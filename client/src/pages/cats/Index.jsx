@@ -1,12 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom"
 import axios from "axios";
 
 function Index({ user }) {
     const [breeds, setBreeds] = useState([]);
-    const [pics, setPics] = useState({});
     const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
 
     async function getBreedsAndPics() {
         try {
@@ -14,33 +11,33 @@ function Index({ user }) {
             const response = await axios.get(breedsUrl, {
                 headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API },
             });
-            console.log(response.data)
             const breedsData = response.data;
 
-            // fetch the picture information for each breed
-
-            const breedPicPromises = breedsData.map(async (obj) => {
-                console.log(obj.id)
-                const breedPicResponse = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${obj.id}&size=small`, {
-                    headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API },
-                });
-                console.log(breedPicResponse.data)
-                const breedPic = breedPicResponse.data;
-                return breedPic;
+            // Fetch the picture information for each breed and add the 'url' property
+            const breedPromises = breedsData.map(async (breed) => {
+                const breedPicResponse = await axios.get(
+                    `https://api.thecatapi.com/v1/images/search?breed_ids=${breed.id}&size=small`,
+                    {
+                        headers: {
+                            "x-api-key": import.meta.env.VITE_APP_THE_CAT_API,
+                        },
+                    }
+                );
+                const breedPicData = breedPicResponse.data[0];
+                if (breedPicData) {
+                    breed.url = breedPicData.url;
+                }
+                return breed;
             });
 
-            const breedPicData = await Promise.all(breedPicPromises);
-
-            setBreeds(breedsData)
-            setPics(breedPicData)
-
+            const breedsWithUrls = await Promise.all(breedPromises);
+            setBreeds(breedsWithUrls);
+            setIsLoading(false);
         } catch (err) {
             console.log(err);
-        } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
     }
-
 
     async function handleSaveBreed(breedID) {
         try {
@@ -55,9 +52,8 @@ function Index({ user }) {
         }
     }
 
+
     useEffect(() => {
-        setBreeds([]);
-        setPics([]);
         if (breeds.length === 0) {
             getBreedsAndPics();
         }
@@ -67,16 +63,16 @@ function Index({ user }) {
         <>
             <h1>Cats! Cats! Cats!</h1>
             <div id="cats">
-                {breeds.length === 0 ? (
+                {isLoading ? (
                     <p>Loading...</p>
                 ) : (
                     breeds.map((breed) => (
                         <div className="breed-card" key={breed.id}>
+                            {console.log(breed)}
                             <h3>{breed.name}</h3>
                             <div className="breed-image">
-                                {console.log(breed)}
-                                {pics[breed.id] ? (
-                                    <img src={pics[breed.id].url} alt={breed.name} />
+                                {breed.url ? (
+                                    <img src={breed.url} alt={breed.name} />
                                 ) : (
                                     <p>No image available</p>
                                 )}
@@ -86,7 +82,9 @@ function Index({ user }) {
                                 <p>{breed.life_span} years</p>
                                 <p>{breed.weight.imperial} lbs</p>
                             </div>
-                            <button onClick={() => handleSaveBreed(breed.id)}>Save to Profile</button>
+                            <button onClick={() => handleSaveBreed(breed.id)}>
+                                Save to Profile
+                            </button>
                         </div>
                     ))
                 )}
