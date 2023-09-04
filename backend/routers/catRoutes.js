@@ -13,7 +13,7 @@ const { authorize } = require('../middleware/authMiddleware')
 router.get('/', authorize, catControl.index)
 
 //delete
-// router.delete('/:id', authorize, catControl.delete)
+router.delete('/:id', authorize, catControl.delete)
 
 // update
 // router.put('/:id', authorize, catControl.update)

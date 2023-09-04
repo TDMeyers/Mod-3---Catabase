@@ -25,7 +25,7 @@ function Navbar() {
                 <>
                     <li style={{ color: "white" }}>Welcome {user.username}!</li>
                     <li onClick={logout}>
-                        <Link to="/posts">Logout</Link>
+                        <Link to="/cats">Logout</Link>
                     </li>
                     <li>
                         <Link to='/profile'>Profile</Link>

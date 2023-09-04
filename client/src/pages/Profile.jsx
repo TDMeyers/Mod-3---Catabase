@@ -9,6 +9,7 @@ export default function Profile() {
     const [favs, setFavs] = useState([]);
     const [favsInfo, setFavsInfo] = useState([]);
     const [input, setInput] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
     async function getFavs() {
         try {
@@ -18,8 +19,11 @@ export default function Profile() {
                 }
             });
             setFavs(response.data);
+            console.log(response.data);
         } catch (err) {
             console.log(err);
+        } finally {
+            setIsLoading(false);
         }
     }
 
@@ -30,7 +34,23 @@ export default function Profile() {
                 headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API },
             });
             const newFavInfo = response.data;
-            setFavsInfo((prevFavInfo) => [...prevFavInfo, ...newFavInfo]);
+            console.log(response.data)
+            setFavsInfo(newFavInfo); // Set the new data, replacing the old data
+        } catch (err) {
+            console.log(err);
+        }
+    }
+    
+
+    async function handleDeleteFav(favId) {
+        try {
+            await axios.delete(`/api/cats/${favId}`, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+            setFavs((prevFavs) => prevFavs.filter((fav) => fav._id !== favId));
+            setFavsInfo((prevFavInfo) => prevFavInfo.filter((fav) => fav._id !== favId));
         } catch (err) {
             console.log(err);
         }
@@ -49,14 +69,16 @@ export default function Profile() {
 
     useEffect(() => {
         setFavs([]);
+        setFavsInfo([]);
         getFavs();
     }, []);
 
     useEffect(() => {
-        setFavsInfo([]);
-        favs.forEach((fav) => {
-            getFavsInfo(fav.breed);
-        });
+        if (favs.length > 0) {
+            favs.forEach((fav) => {
+                getFavsInfo(fav.breed);
+            });
+        }
     }, [favs]);
 
     return (
@@ -73,16 +95,21 @@ export default function Profile() {
             </div>
             <div className="saved-breeds">
                 <h3>Saved Breeds</h3>
-                {favsInfo.map((fav, index) => (
-                    <div className="a-cat" key={index}>
-                        {console.log(fav)}
-                        {/* <h3>{fav.breeds[0].name}</h3> */}
-                        <h3>{fav.id}</h3>
-                        <div className="breed-image">
-                            <img src={fav.url} alt={fav.id} />
+                {isLoading ? (
+                    <p>Loading...</p>
+                ) : (
+                    favsInfo.map((fav, index) => (
+                        <div className="a-cat" key={index}>
+                            {/* {console.log(fav)} */}
+                            <h3>{fav.breed}</h3>
+                            <h3>{fav.id}</h3>
+                            <div className="breed-image">
+                                <img src={fav.url} alt={fav.id} />
+                            </div>
+                            <button onClick={() => handleDeleteFav(fav._id)}>Re-meow-ve Favorite</button>
                         </div>
-                    </div>
-                ))}
+                    ))
+                )}
             </div>
         </>
     );
