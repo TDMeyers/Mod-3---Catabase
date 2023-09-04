@@ -17,12 +17,13 @@ module.exports.index = async (req, res) => {
 module.exports.create = async (req, res) => {
   console.log(req.body);
   try {
-    // Get the breed ID from the request body
-    const { breedID } = req.body;
+    // Get the breed ID and breed name from the request body
+    const { id, name } = req.body;
 
     // create a new favorited breed document
     const newBreed = new Breeds({
-      breed: breedID,
+      breed: id,
+      name: name,
       user: req.username,
     });
 

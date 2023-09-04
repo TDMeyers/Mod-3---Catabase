@@ -39,9 +39,9 @@ function Index({ user }) {
         }
     }
 
-    async function handleSaveBreed(breedID) {
+    async function handleSaveBreed(id, name) {
         try {
-            const response = await axios.post('/api/cats', { breedID }, {
+            const response = await axios.post('/api/cats', { id, name }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
@@ -82,7 +82,7 @@ function Index({ user }) {
                                 <p>{breed.life_span} years</p>
                                 <p>{breed.weight.imperial} lbs</p>
                             </div>
-                            <button onClick={() => handleSaveBreed(breed.id)}>
+                            <button onClick={() => handleSaveBreed(breed.id, breed.name)}>
                                 Save to Profile
                             </button>
                         </div>
