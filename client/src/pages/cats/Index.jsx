@@ -1,61 +1,53 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom"
-
-import axios from '../../api'
+import axios from "axios";
 
 function Index({ user }) {
+    const [breeds, setBreeds] = useState([]);
+    const [pics, setPics] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
+    const navigate = useNavigate();
 
-    const [breeds, setBreeds] = useState([])
-
-    const [pics, setPics] = useState([])
-
-    const navigate = useNavigate()
-
-    async function getBreeds() {
-
-        const breedsUrl = `https://api.thecatapi.com/v1/breeds`;
+    async function getBreedsAndPics() {
         try {
-            // console.log('v1.00')
-            const response = await axios.get(breedsUrl,
-                {
-                    headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API }
-                }
-            );
+            const breedsUrl = `https://api.thecatapi.com/v1/breeds`;
+            const response = await axios.get(breedsUrl, {
+                headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API },
+            });
             console.log(response.data)
-            setBreeds(response.data)
+            const breedsData = response.data;
+
+            // fetch the picture information for each breed
+
+            const breedPicPromises = breedsData.map(async (obj) => {
+                console.log(obj.id)
+                const breedPicResponse = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${obj.id}&size=small`, {
+                    headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API },
+                });
+                console.log(breedPicResponse.data)
+                const breedPic = breedPicResponse.data;
+                return breedPic;
+            });
+
+            const breedPicData = await Promise.all(breedPicPromises);
+
+            setBreeds(breedsData)
+            setPics(breedPicData)
 
         } catch (err) {
-            console.log(err)
+            console.log(err);
+        } finally {
+            setIsLoading(false)
         }
     }
 
-    async function getPics(obj) {
-
-        const picUrl = `https://api.thecatapi.com/v1/images/${obj.reference_image_id}?size=thumb`;
-
-        try {
-            // console.log('v1.00')
-            const response = await axios.get(picUrl,
-                {
-                    headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API }
-                }
-            );
-
-            const newPic = response.data
-            // console.log(response.data)
-            setPics((prevPics) => [...prevPics, newPic])
-        } catch (err) {
-            console.log(err)
-        }
-    }
 
     async function handleSaveBreed(breedID) {
-        // Send a POST request to save the breed
         try {
             const response = await axios.post('/api/cats', { breedID }, {
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
+                    Authorization: `Bearer ${localStorage.getItem('token')}`,
+                },
             });
             console.log('Breed saved:', response.data);
         } catch (error) {
@@ -64,37 +56,37 @@ function Index({ user }) {
     }
 
     useEffect(() => {
-        getBreeds();
+        setBreeds([]);
+        setPics([]);
+        if (breeds.length === 0) {
+            getBreedsAndPics();
+        }
     }, []);
-
-    useEffect(() => {
-        // Loop through the breeds and fetch pics for each breed
-        breeds.forEach((breed) => {
-            getPics(breed);
-            // console.log(breed)
-        });
-    }, [breeds]);
 
     return (
         <>
             <h1>Cats! Cats! Cats!</h1>
             <div id="cats">
-                {pics === 0 ? (
+                {breeds.length === 0 ? (
                     <p>Loading...</p>
                 ) : (
-                    pics.map((pic, index) => (
-                        <div className="breed-card" key={index}>
-                            {console.log(pics)}
-                            <h3>{pic.breeds[0].name}</h3>
+                    breeds.map((breed) => (
+                        <div className="breed-card" key={breed.id}>
+                            <h3>{breed.name}</h3>
                             <div className="breed-image">
-                                <img src={pic.url} alt={pic.name} />
+                                {console.log(breed)}
+                                {pics[breed.id] ? (
+                                    <img src={pics[breed.id].url} alt={breed.name} />
+                                ) : (
+                                    <p>No image available</p>
+                                )}
                             </div>
                             <div className="breed-body">
-                                <p>{pic.breeds[0].description}</p>
-                                <p>{pic.breeds[0].life_span} years</p>
-                                <p>{pic.breeds[0].weight.imperial} lbs</p>
+                                <p>{breed.description}</p>
+                                <p>{breed.life_span} years</p>
+                                <p>{breed.weight.imperial} lbs</p>
                             </div>
-                            <button onClick={() => handleSaveBreed(`${pic.breeds[0].id}`)}>Save to Profile</button>
+                            <button onClick={() => handleSaveBreed(breed.id)}>Save to Profile</button>
                         </div>
                     ))
                 )}
@@ -103,4 +95,4 @@ function Index({ user }) {
     );
 }
 
-export default Index
+export default Index;
