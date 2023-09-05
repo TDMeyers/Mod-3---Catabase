@@ -75,11 +75,6 @@ function Register() {
         },
     });
 
-    useEffect(() => {
-        // This effect will run after the component is mounted
-        setShowAnimation(true);
-    }, []);
-
     return (
         <ThemeProvider theme={darkTheme}>
             <Container component="main" maxWidth="xs">
