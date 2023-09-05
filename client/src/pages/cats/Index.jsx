@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Mediacard from "../../components/Mediacard"
+import Grid from '@mui/material/Grid'; // Grid version 1
+import { Typography } from "@mui/material";
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
 
 function Index({ user }) {
     const [breeds, setBreeds] = useState([]);
@@ -60,19 +66,41 @@ function Index({ user }) {
         }
     }, []);
 
+    const darkTheme = createTheme({
+        palette: {
+            mode: 'dark',
+        },
+    });
+
     return (
-        <>
-            <h1>Cats! Cats! Cats!</h1>
-            <div id="cats">
+        <ThemeProvider theme={darkTheme}>
+            <Container component="main" maxWidth="xl">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+            <Typography variant="h4" gutterBottom>
+                Cats! Cats! Cats! 
+            </Typography>
+            <Grid container spacing={2} justifyContent="center" >
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
-                    breeds.map((breed) => (
+                    breeds.map((breed, index) => (
+                        <Grid item xs={4} key={index}>
                         <Mediacard breed={breed} key={breed.id} />
+                        </Grid>
                     ))
                 )}
-            </div>
-        </>
+            </Grid>
+            </Box>
+        </Container>
+        </ThemeProvider>
     );
 }
 

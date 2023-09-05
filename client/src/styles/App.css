@@ -1,7 +1,6 @@
 #root {
-  max-width: 100vp;
+  /* max-width: 100vp; */
   margin: 0 auto;
-  padding: 2rem;
-  /* text-align: center; */
+  /* padding: 2rem; */
+  /* justify-content: center; */
 }
-
