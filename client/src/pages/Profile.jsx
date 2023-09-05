@@ -85,14 +85,7 @@ export default function Profile() {
     return (
         <div>
             <div className="user-profile">
-                <img src={image} alt="Profile image" />
-                <h1>{username}</h1>
-                <p>{maskedEmail}</p>
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor="about">A little about you and your interests or expertise</label>
-                    <textarea id="about" name="about" rows="5" col="30"></textarea>
-                    <button>Submit</button>
-                </form>
+                {/* ... (other profile elements) */}
             </div>
             <div className="saved-breeds">
                 <h3>Saved Breeds</h3>
@@ -100,19 +93,22 @@ export default function Profile() {
                     <p>Loading...</p>
                 ) : (
                     <div className="fav-card">
-                        {favsInfo.map((fav, index) => (
-                            <div className="a-cat" key={index}>
-                                {console.log(favsInfo)}
-                                <div className="fav-image">
-                                    <img src={fav.url} alt={fav.id} />
+                        {favs.map((fav, index) => {
+                            const favInfo = favsInfo[index];
+                            console.log(fav)
+                            console.log(favInfo) // Get corresponding info
+                            return (
+                                <div className="a-cat" key={index}>
+                                    <div className="fav-info">
+                                        <h3>{fav.name}</h3>
+                                    </div>
+                                    <div className="fav-image">
+                                        <img src={favInfo.url} alt={favInfo.id} />
+                                    </div>
+                                    <button onClick={() => handleDeleteFav(fav._id)}>Re-meow-ve Favorite</button>
                                 </div>
-                                <div className="fav-info">
-                                    <h3>{fav.breed}</h3>
-                                    <h3>{fav.id}</h3>
-                                </div>
-                                <button onClick={() => handleDeleteFav(fav._id)}>Re-meow-ve Favorite</button>
-                            </div>
-                        ))}
+                            );
+                        })}
                     </div>
                 )}
             </div>
