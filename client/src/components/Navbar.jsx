@@ -58,10 +58,12 @@ function Navbar() {
 
     const settingsLinks = isLoggedIn
         ? [
-            { label: 'Profile', path: '/profile' },
+            { label: 'Profile', path: 'cats/profile' },
             { label: 'Sign out', onClick: logout  }
         ]
-    : [{ label: 'Register', path: '/register'}]
+    : [{ label: 'Register', path: '/cats/register'},
+    { label: 'Login', path: '/cats/Login'}
+]
     
     // const settings = [
     //     { label: 'Profile', path: '/profile' },

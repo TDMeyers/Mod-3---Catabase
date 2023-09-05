@@ -100,6 +100,7 @@ function Login() {
                             name="username"
                             label="username"
                             value={form.username}
+                            onChange={handleChange}
                             autoComplete='username'
                             autoFocus
                         />
@@ -111,6 +112,7 @@ function Login() {
                             name="password"
                             label="password"
                             value={form.password}
+                            onChange={handleChange}
                             placeholder="Password"
                         />
                         <FormControlLabel
