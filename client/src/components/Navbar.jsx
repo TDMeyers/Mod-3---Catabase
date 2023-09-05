@@ -44,18 +44,12 @@ function Navbar( ) {
     };
 
     const isLoggedIn = !!localStorage.token; 
-    console.log(localStorage, user)
 
     const pageLinks = isLoggedIn
         ? [
             { label: 'Saved Cats', path: '/profile' }
         ]
     : [{ label: 'Catjam', path: '/catjam' }]
-
-    // const pages = [
-    //     { label: 'Saved Cats', path: '/profile' },
-    //     { label: 'Catjam', path: '/catjam' }
-    // ];
 
     const settingsLinks = isLoggedIn
         ? [
@@ -65,11 +59,6 @@ function Navbar( ) {
     : [{ label: 'Register', path: '/cats/register'},
     { label: 'Login', path: '/cats/Login'}
 ]
-    
-    // const settings = [
-    //     { label: 'Profile', path: '/profile' },
-    //     { label: 'Sign out', onClick: logout  }
-    // ]
 
     return (
         <AppBar position="static">

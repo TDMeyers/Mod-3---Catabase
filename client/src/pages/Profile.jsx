@@ -3,8 +3,6 @@ import { useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 
-
-
 export default function Profile() {
     const user = useSelector((state) => state.user);
     const { username, image, email } = user;
@@ -32,7 +30,7 @@ export default function Profile() {
                 const favInfoResponse = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${fav.breed}`, {
                     headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API },
                 });
-                const favInfo = favInfoResponse.data[0]; // Assuming each fav has only one info entry
+                const favInfo = favInfoResponse.data[0]; 
                 return favInfo;
             });
 
@@ -106,7 +104,6 @@ export default function Profile() {
     return (
         <div>
             <div className="user-profile">
-                {/* ... (other profile elements) */}
             </div>
             <div className="saved-breeds">
                 <h3>Saved Breeds</h3>
@@ -117,7 +114,6 @@ export default function Profile() {
                         <div className="fav-card">
                             {favs.map((fav, index) => {
                                 const favInfo = favsInfo[index];
-                                // Get corresponding info
                                 return (
                                     <div className="a-cat" key={index}>
                                         <div className="fav-info">
