@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Mediacard from "../../components/Mediacard"
 
 function Index({ user }) {
     const [breeds, setBreeds] = useState([]);
@@ -67,25 +68,7 @@ function Index({ user }) {
                     <p>Loading...</p>
                 ) : (
                     breeds.map((breed) => (
-                        <div className="breed-card" key={breed.id}>
-                            {console.log(breed)}
-                            <h3>{breed.name}</h3>
-                            <div className="breed-image">
-                                {breed.url ? (
-                                    <img src={breed.url} alt={breed.name} />
-                                ) : (
-                                    <p>No image available</p>
-                                )}
-                            </div>
-                            <div className="breed-body">
-                                <p>{breed.description}</p>
-                                <p>{breed.life_span} years</p>
-                                <p>{breed.weight.imperial} lbs</p>
-                            </div>
-                            <button onClick={() => handleSaveBreed(breed.id, breed.name)}>
-                                Save to Profile
-                            </button>
-                        </div>
+                        <Mediacard breed={breed} key={breed.id} />
                     ))
                 )}
             </div>
