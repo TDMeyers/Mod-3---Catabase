@@ -16,7 +16,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
-function Navbar() {
+function Navbar( ) {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -43,7 +43,8 @@ function Navbar() {
         dispatch(addUser({}))
     };
 
-    const isLoggedIn = !!user.token; 
+    const isLoggedIn = !!localStorage.token; 
+    console.log(localStorage, user)
 
     const pageLinks = isLoggedIn
         ? [
