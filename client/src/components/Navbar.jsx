@@ -53,7 +53,7 @@ function Navbar( ) {
 
     const settingsLinks = isLoggedIn
         ? [
-            { label: 'Profile', path: 'cats/profile' },
+            { label: 'Profile', path: '/profile' },
             { label: 'Sign out', onClick: logout  }
         ]
     : [{ label: 'Register', path: '/cats/register'},
@@ -176,7 +176,7 @@ function Navbar( ) {
                         >
                             {settingsLinks.map((setting, index) => (
                                 <MenuItem key={index} onClick={handleCloseUserMenu}>
-                                    <Typography textAlign="center">{setting.label}</Typography>
+                                    <Typography textAlign="center" component={Link} to={setting.path}>{setting.label}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
