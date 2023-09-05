@@ -16,7 +16,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
-function Navbar( ) {
+function Navbar() {
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -43,22 +43,22 @@ function Navbar( ) {
         dispatch(addUser({}))
     };
 
-    const isLoggedIn = !!localStorage.token; 
+    const isLoggedIn = !!localStorage.token;
 
     const pageLinks = isLoggedIn
         ? [
             { label: 'Saved Cats', path: '/profile' }
         ]
-    : [{ label: 'Catjam', path: '/catjam' }]
+        : [{ label: 'Catjam', path: '/catjam' }]
 
     const settingsLinks = isLoggedIn
         ? [
             { label: 'Profile', path: '/profile' },
-            { label: 'Sign out', onClick: logout  }
+            { label: 'Sign out', onClick: logout }
         ]
-    : [{ label: 'Register', path: '/cats/register'},
-    { label: 'Login', path: '/cats/Login'}
-]
+        : [{ label: 'Register', path: '/cats/register' },
+        { label: 'Login', path: '/cats/Login' }
+        ]
 
     return (
         <AppBar position="static">
@@ -95,6 +95,7 @@ function Navbar( ) {
                             <MenuIcon />
                         </IconButton>
                         <Menu
+
                             id="menu-appbar"
                             anchorEl={anchorElNav}
                             anchorOrigin={{
@@ -113,8 +114,12 @@ function Navbar( ) {
                             }}
                         >
                             {pageLinks.map((page) => (
-                                <MenuItem key={page.label} onClick={handleCloseNavMenu} component={Link} to={page.path}>
-                                    <Typography textAlign="center">{page.label}</Typography>
+                                <MenuItem key={page.label}
+                                    onClick={handleCloseNavMenu}
+                                    component={Link}
+                                    to={page.path}
+                                >
+                                    <Typography textAlign="center" >{page.label}</Typography>
                                 </MenuItem>
                             ))}
                         </Menu>
@@ -155,11 +160,13 @@ function Navbar( ) {
                     <Box sx={{ flexGrow: 0 }}>
                         <Tooltip title="Open settings">
                             <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                <Avatar alt="D & D Logo" src="" />
+                                <Avatar alt="Cat-A-Base Logo" src="" />
                             </IconButton>
                         </Tooltip>
                         <Menu
-                            sx={{ mt: '45px' }}
+                            sx={{
+                                mt: '45px',
+                            }}
                             id="menu-appbar"
                             anchorEl={anchorElUser}
                             anchorOrigin={{
@@ -175,7 +182,7 @@ function Navbar( ) {
                             onClose={handleCloseUserMenu}
                         >
                             {settingsLinks.map((setting, index) => (
-                                <MenuItem key={index} onClick={handleCloseUserMenu}>
+                                <MenuItem key={index} onClick={setting.onClick || handleCloseUserMenu} >
                                     <Typography textAlign="center" component={Link} to={setting.path}>{setting.label}</Typography>
                                 </MenuItem>
                             ))}
