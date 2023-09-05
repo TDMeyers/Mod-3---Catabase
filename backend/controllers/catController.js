@@ -47,3 +47,39 @@ module.exports.delete = async (req, res) => {
     res.status(400).json({ error: err.message });
   }
 };
+
+module.exports.update = async (req, res) => {
+  try {
+    
+
+    const { favId } = req.params; // Extract favId from params
+    const { givenName, givenAge } = req.body; // Extract data from the request body
+
+    console.log(favId, givenAge, givenName);
+    // Check if the breed with the provided ID exists
+    let breed = await Breeds.findOne(
+      { _id: favId, user: req.username }
+    );
+
+    if (!breed) {
+      return res.status(404).json({ message: "Breed not found" });
+    }
+
+    // Update the breed properties if provided
+    if (givenName) {
+      breed.givenName = givenName;
+    }
+
+    if (givenAge) {
+      breed.givenAge = givenAge;
+    }
+
+    // Save the updated breed
+    breed = await breed.save();
+
+    res.status(200).json(breed);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Server error" });
+  }
+};

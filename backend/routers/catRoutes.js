@@ -16,7 +16,7 @@ router.get('/', authorize, catControl.index)
 router.delete('/:id', authorize, catControl.delete)
 
 // update
-// router.put('/:id', authorize, catControl.update)
+router.post('/:id', authorize, catControl.update)
 
 // create
 router.post('/', authorize, catControl.create)

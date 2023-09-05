@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
+import { useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+
+
 
 export default function Profile() {
     const user = useSelector((state) => state.user);
@@ -11,6 +14,9 @@ export default function Profile() {
     const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(true);
     const [idToBreedInfo, setIdToBreedInfo] = useState({}); // Declare the mapping object
+
+    const nameRef = useRef();
+    const ageRef = useRef();
 
     async function getFavsAndInfo() {
         try {
@@ -62,9 +68,24 @@ export default function Profile() {
         }
     }
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setInput(e.target.value);
+    async function handleSubmit(e, favId) {
+        e.preventDefault()
+        try {
+            const namedBreed = {
+                name: nameRef.current.value,
+                age: ageRef.current.value,
+            }
+            const response = await axios.post(`/api/cats/${favId}`, namedBreed, {  // Use fav._id as the parameter
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+
+            console.log('Breed updated:', response.data);
+        } catch (err) {
+            console.log(err.message);
+        }
     }
 
     const hiddenEmail = email.split("");
@@ -92,24 +113,44 @@ export default function Profile() {
                 {isLoading ? (
                     <p>Loading...</p>
                 ) : (
-                    <div className="fav-card">
-                        {favs.map((fav, index) => {
-                            const favInfo = favsInfo[index];
-                            console.log(fav)
-                            console.log(favInfo) // Get corresponding info
-                            return (
-                                <div className="a-cat" key={index}>
-                                    <div className="fav-info">
-                                        <h3>{fav.name}</h3>
+                    <>
+                        <div className="fav-card">
+                            {favs.map((fav, index) => {
+                                const favInfo = favsInfo[index];
+                                // Get corresponding info
+                                return (
+                                    <div className="a-cat" key={index}>
+                                        <div className="fav-info">
+                                            <h3>{fav.name}</h3>
+                                        </div>
+                                        <div className="fav-image">
+                                            <img src={favInfo.url} alt={favInfo.id} />
+                                        </div>
+                                        <>
+                                            <form onSubmit={(e) => handleSubmit(e, fav._id)}>
+                                                <label htmlFor="givenName">Their name:</label>
+                                                <br />
+                                                <input type="text"
+                                                    id="givenName"
+                                                    name="givenName"
+                                                    ref={nameRef} />
+                                                <label>Their age:</label>
+                                                <br />
+                                                <input type="number"
+                                                    id="givenAge"
+                                                    name="givenAge"
+                                                    ref={ageRef}
+                                                />
+                                                <button>Submit</button>
+                                            </form>
+                                        </>
+                                        <button onClick={() => handleDeleteFav(fav._id)}>Re-meow-ve Favorite</button>
                                     </div>
-                                    <div className="fav-image">
-                                        <img src={favInfo.url} alt={favInfo.id} />
-                                    </div>
-                                    <button onClick={() => handleDeleteFav(fav._id)}>Re-meow-ve Favorite</button>
-                                </div>
-                            );
-                        })}
-                    </div>
+                                );
+
+                            })}
+                        </div>
+                    </>
                 )}
             </div>
         </div>
