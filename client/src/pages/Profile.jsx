@@ -1,18 +1,22 @@
-import { useEffect, useState } from "react";
-import { useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
+import { SavedCard } from '../components/Savedcard';
+import Grid from '@mui/material/Grid'; // Grid version 1
+import { Typography } from "@mui/material";
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Box from '@mui/material/Box';
 
 export default function Profile() {
     const user = useSelector((state) => state.user);
     const { username, image, email } = user;
 
     const [favs, setFavs] = useState([]);
-    const [favsInfo, setFavsInfo] = useState([]);
-    const [input, setInput] = useState("");
     const [isLoading, setIsLoading] = useState(true);
-    const [idToBreedInfo, setIdToBreedInfo] = useState({}); // Declare the mapping object
-
+    const [deleteSuccessOpen, setDeleteSuccessOpen] = useState(false);
+    const [deleteErrorOpen, setDeleteErrorOpen] = useState(false);
     const nameRef = useRef();
     const ageRef = useRef();
 
@@ -30,21 +34,14 @@ export default function Profile() {
                 const favInfoResponse = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${fav.breed}`, {
                     headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API },
                 });
-                const favInfo = favInfoResponse.data[0]; 
-                return favInfo;
+                const favInfo = favInfoResponse.data[0];
+                return { fav, favInfo }; // Combine fav and favInfo into an object
             });
 
             const favInfoData = await Promise.all(favInfoPromises);
 
-            // Create a mapping object to associate _id values with breed info
-            const idToBreedInfo = {};
-            favsData.forEach((fav, index) => {
-                idToBreedInfo[fav._id] = favInfoData[index];
-            });
+            setFavs(favInfoData); // Set favs as the combined array of fav and favInfo objects
 
-            setFavs(favsData);
-            setFavsInfo(favInfoData);
-            setIdToBreedInfo(idToBreedInfo); // Store the mapping object in state
         } catch (err) {
             console.log(err);
         } finally {
@@ -59,96 +56,71 @@ export default function Profile() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-            setFavs((prevFavs) => prevFavs.filter((fav) => fav._id !== favId));
-            setFavsInfo((prevFavInfo) => prevFavInfo.filter((fav) => fav._id !== favId));
+
+            // Update the state by filtering out the deleted item based on favId
+            setFavs((prevFavs) => prevFavs.filter((fav) => fav.fav._id !== favId));
+
+            // Update state to call upon the snackbar
+            setDeleteSuccessOpen(true);
         } catch (err) {
             console.log(err);
+            setDeleteErrorOpen(true);
         }
     }
 
-    async function handleSubmit(e, favId) {
-        e.preventDefault()
-        try {
-            const namedBreed = {
-                name: nameRef.current.value,
-                age: ageRef.current.value,
-            }
-            const response = await axios.post(`/api/cats/${favId}`, namedBreed, {  // Use fav._id as the parameter
-            }, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            });
-
-            console.log('Breed updated:', response.data);
-        } catch (err) {
-            console.log(err.message);
-        }
-    }
-
-    const hiddenEmail = email.split("");
-    for (let i = 3; i < hiddenEmail.length; i++) {
-        hiddenEmail[i] = "*";
-    }
-    const maskedEmail = hiddenEmail.join("");
+    const darkTheme = createTheme({
+        palette: {
+            mode: 'dark',
+        },
+    });
 
     useEffect(() => {
-        setFavs([]);
-        setFavsInfo([]);
         if (favs.length === 0) {
             // Only fetch favs if favs array is empty
             getFavsAndInfo();
         }
-    }, []);
+    }, []); // Add an empty dependency array to ensure this effect runs only once
 
     return (
-        <div>
-            <div className="user-profile">
-            </div>
-            <div className="saved-breeds">
-                <h3>Saved Breeds</h3>
-                {isLoading ? (
-                    <p>Loading...</p>
-                ) : (
-                    <>
-                        <div className="fav-card">
-                            {favs.map((fav, index) => {
-                                const favInfo = favsInfo[index];
-                                return (
-                                    <div className="a-cat" key={index}>
-                                        <div className="fav-info">
-                                            <h3>{fav.name}</h3>
-                                        </div>
-                                        <div className="fav-image">
-                                            <img src={favInfo.url} alt={favInfo.id} />
-                                        </div>
-                                        <>
-                                            <form onSubmit={(e) => handleSubmit(e, fav._id)}>
-                                                <label htmlFor="givenName">Their name:</label>
-                                                <br />
-                                                <input type="text"
-                                                    id="givenName"
-                                                    name="givenName"
-                                                    ref={nameRef} />
-                                                <label>Their age:</label>
-                                                <br />
-                                                <input type="number"
-                                                    id="givenAge"
-                                                    name="givenAge"
-                                                    ref={ageRef}
-                                                />
-                                                <button>Submit</button>
-                                            </form>
-                                        </>
-                                        <button onClick={() => handleDeleteFav(fav._id)}>Re-meow-ve Favorite</button>
-                                    </div>
-                                );
-
-                            })}
-                        </div>
-                    </>
-                )}
-            </div>
-        </div>
+        <ThemeProvider theme={darkTheme}>
+            <Container component="main" maxWidth="xl" margin="1rem">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Typography variant="h4" gutterBottom>
+                        Welcome, {username}, are you enjoying herding cats?
+                    </Typography>
+                    <Typography variant="h5" spacing={2}>
+                        Saved Kitties
+                    </Typography>
+                    <Grid container spacing={2} justifyContent="center">
+                        {isLoading ? (
+                            <p>Loading...</p>
+                        ) : (
+                            favs.map(({ fav, favInfo }, index) => (
+                                <Grid item xs={4} key={index}>
+                                    <SavedCard
+                                        breed={fav}
+                                        pic={favInfo}
+                                        onDelete={() => handleDeleteFav(fav.fav._id)}
+                                        onUpdate={(name, age) => handleUpdateFav(fav.fav._id, name, age)}
+                                        deleteSuccessOpen={deleteSuccessOpen}
+                                        setDeleteSuccessOpen={setDeleteSuccessOpen}
+                                        deleteErrorOpen={deleteErrorOpen}
+                                        setDeleteErrorOpen={setDeleteErrorOpen}
+                                    />
+                                </Grid>
+                            ))
+                        )}
+                    </Grid>
+                </Box>
+            </Container>
+        </ThemeProvider>
     );
 }

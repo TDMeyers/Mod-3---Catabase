@@ -74,7 +74,7 @@ function Index({ user }) {
 
     return (
         <ThemeProvider theme={darkTheme}>
-            <Container component="main" maxWidth="xl">
+            <Container component="main" maxWidth="xl" margin="1rem">
                 <CssBaseline />
                 <Box
                     sx={{
@@ -86,7 +86,7 @@ function Index({ user }) {
                 >
             <Typography variant="h4" gutterBottom>
                 Cats! Cats! Cats! 
-            </Typography>
+            </Typography> 
             <Grid container spacing={2} justifyContent="center" >
                 {isLoading ? (
                     <p>Loading...</p>
