@@ -51,13 +51,16 @@ module.exports.delete = async (req, res) => {
 module.exports.update = async (req, res) => {
   try {
     
+    console.log(req.params)
+    console.log(req.body)
 
-    const { favId } = req.params; // Extract favId from params
-    const { givenName, givenAge } = req.body; // Extract data from the request body
+    const { favId } = req.params._id; // Extract favId from params
+    const { givenName} = req.params.name; // Extract data from the request body
+    const { givenAge } = req.params.age
 
     console.log(favId, givenAge, givenName);
     // Check if the breed with the provided ID exists
-    let breed = await Breeds.findOne(
+    let breed = await Breeds.findOneAndUpdate(
       { _id: favId, user: req.username }
     );
 
