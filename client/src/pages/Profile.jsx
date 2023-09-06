@@ -28,17 +28,16 @@ export default function Profile() {
                 }
             });
             const favsData = response.data;
-
-            // Fetch breed info for each fav
-            const favInfoPromises = favsData.map(async (fav) => {
+    
+            const favInfoData = [];
+    
+            for (const fav of favsData) {
                 const favInfoResponse = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${fav.breed}`, {
                     headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API },
                 });
                 const favInfo = favInfoResponse.data[0];
-                return { fav, favInfo }; // Combine fav and favInfo into an object
-            });
-
-            const favInfoData = await Promise.all(favInfoPromises);
+                favInfoData.push({ fav, favInfo }); // Combine fav and favInfo into an object
+            };
 
             setFavs(favInfoData); // Set favs as the combined array of fav and favInfo objects
 
@@ -58,7 +57,8 @@ export default function Profile() {
             });
 
             // Update the state by filtering out the deleted item based on favId
-            setFavs((prevFavs) => prevFavs.filter((fav) => fav.fav._id !== favId));
+            setFavs((prevFavs) => prevFavs.filter((fav) => fav._id !== favId));
+            
 
             // Update state to call upon the snackbar
             setDeleteSuccessOpen(true);
@@ -105,12 +105,11 @@ export default function Profile() {
                         ) : (
                             favs.map(({ fav, favInfo }, index) => (
                                 <Grid item xs={4} key={index}>
-                                    { console.log(favs)}
                                     <SavedCard
                                         breed={fav}
                                         pic={favInfo}
-                                        onDelete={() => handleDeleteFav(fav.fav._id)}
-                                        onUpdate={(name, age) => handleUpdateFav(fav.fav._id, name, age)}
+                                        onDelete={() => handleDeleteFav(fav._id)}
+                                        onUpdate={(name, age) => handleUpdateFav(fav._id, name, age)}
                                         deleteSuccessOpen={deleteSuccessOpen}
                                         setDeleteSuccessOpen={setDeleteSuccessOpen}
                                         deleteErrorOpen={deleteErrorOpen}
