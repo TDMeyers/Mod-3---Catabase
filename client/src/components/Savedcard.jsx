@@ -13,8 +13,6 @@ import { Container, TextField } from '@mui/material';
 
 export function SavedCard({ breed, pic, onDelete, onUpdate, deleteSuccessOpen, setDeleteSuccessOpen, deleteErrorOpen, setDeleteErrorOpen }) {
 
-    
-
     const user = useSelector((state) => state.user);
     const { username, image, email } = user;
     const [successOpen, setSuccessOpen] = useState(false);
@@ -24,31 +22,25 @@ export function SavedCard({ breed, pic, onDelete, onUpdate, deleteSuccessOpen, s
 
     async function handleUpdateBreed(_id, name, age) {
         try {
-            const response = await axios.post(`/api/cats/${_id}`, {_id, name, age }, {
+            const response = await axios.post(`/api/cats/${_id}`, { _id, name, age }, {
                 headers: {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
-                
+
             });
-            console.log(req.params)
-            console.log(req.body)
-            console.log(response)
-            console.log('Breed updated:', response.data);
             setSuccessOpen(true);
         } catch (error) {
             console.error('Error updating breed:', error);
             setErrorOpen(true);
-        }
-    }
+        };
+    };
 
     return (
         <Container>
             <Card sx={{ maxWidth: 345 }}>
-                
                 <CardMedia
                     sx={{ height: 140 }}
-
-                    image={pic.url || "/placeholder-image.jpg"} // You can use a placeholder image if breed.url is not available
+                    image={pic.url || "/placeholder-image.jpg"}
                     title={breed.name}
                 />
                 <CardContent>
@@ -60,11 +52,6 @@ export function SavedCard({ breed, pic, onDelete, onUpdate, deleteSuccessOpen, s
                     </Typography>
                 </CardContent>
                 <CardActions>
-                    
-                        {console.log(breed._id)}
-                        {console.log(name)}
-                        {console.log(age)}
-                    
                     <Button size="small" onClick={() => handleUpdateBreed(breed._id, name, age)}>
                         Update
                     </Button>
@@ -102,7 +89,6 @@ export function SavedCard({ breed, pic, onDelete, onUpdate, deleteSuccessOpen, s
                     Action successful!
                 </MuiAlert>
             </Snackbar>
-
             <Snackbar
                 open={errorOpen}
                 autoHideDuration={3000} // Adjust the duration as needed

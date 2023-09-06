@@ -46,8 +46,8 @@ export default function Profile() {
             console.log(err);
         } finally {
             setIsLoading(false);
-        }
-    }
+        };
+    };
 
     async function handleDeleteFav(favId) {
         try {
@@ -65,8 +65,8 @@ export default function Profile() {
         } catch (err) {
             console.log(err);
             setDeleteErrorOpen(true);
-        }
-    }
+        };
+    };
 
     const darkTheme = createTheme({
         palette: {
@@ -105,6 +105,7 @@ export default function Profile() {
                         ) : (
                             favs.map(({ fav, favInfo }, index) => (
                                 <Grid item xs={4} key={index}>
+                                    { console.log(favs)}
                                     <SavedCard
                                         breed={fav}
                                         pic={favInfo}
