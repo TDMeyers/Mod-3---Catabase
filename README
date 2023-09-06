@@ -1,11 +1,30 @@
-THIS IS TEXT TO EDIT LATER
-Introduction
+Cat-A-Base LIVE HERE AT --- https://cat-a-base.onrender.com/cats
 
-A paragraph used to introduce interested parties to the project and needs to include one or more screenshots.
+A MERN stack based website focused on cats, cats, cats. It is connected with The Cats Api to import a variety of pictures and lots of information about various breeds. 
+The goal with development was to have a suitably comprehensive database of information that users could look through. Users can make an account and save favorites to their profile to view later. 
+An extended goal is to future utilize the MERN stack and allow for multiple-user interaction by allowing for comments to be tagged by both user, location, and breed. 
+
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/uUPLrdk"  ><a href="//imgur.com/a/uUPLrdk">Cat-A-Base</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+------------------------------------------------------------------------------------------
+
 
 Technologies Used
 
-A list of all technologies, libraries, APIs, etc. used in the project.
+React Redux Toolkit, Router-DOM
+Mongoose, Mongo.DB
+Node.js
+Express
+Cors
+Bcrypt
+Dotenv
+JSONWebToken
+
+Material UI
+Trello
+Wireframe.cc
+Lucidchart
+The Cat Api
+
 
 GETTING STARTED
 
@@ -16,7 +35,8 @@ DEPLOYED APP:
 mongo backend:
 https://catabase-database.onrender.com
 
-PLACEHOLDER LINK
+deployed site: 
+https://cat-a-base.onrender.com/cats
 
 TRELLO:
 
@@ -27,10 +47,17 @@ https://trello.com/b/DkyoYhqT/cat-a-base-board
 
 Unsolved Problems
 
-List any unsolved issues.
+The Cat Api occasionally returns a 429 error when fetching pictures for the main scroll feed. It throws an error in the console feed but doesn't always seem to produce an error on the user's end. 
+Sometimes it does duplicate pictures in the cards for the various items while mapping over the results. 
+
+When trying to send a post request on the user's profile page sometimes it correctly sends the headers with the _id key passed through and sometimes it sends the body information as a URL query. 
 
 
 Future Enhancements
 
+Allowing multiple users to comment on one breed
+Linking each breed card to a page with full information from the API 
+Correcting the post request from profile when updating 
+allowing for upload of pictures from users for cats and profile picture 
 
 Identify future features and enhancements planned for the project.
