@@ -23,6 +23,9 @@ function MediaCard({ breed }) {
                     Authorization: `Bearer ${localStorage.getItem('token')}`,
                 },
             });
+
+            console.log(breed)
+
             console.log('Breed saved:', response.data);
             setSuccessOpen(true);
         } catch (error) {
@@ -45,6 +48,11 @@ function MediaCard({ breed }) {
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                         {breed.description}
+                        <br />
+                    </Typography>
+                    <Typography variant="body2">
+                        Typically lives {breed.life_span} years.
+                        <br />
                     </Typography>
                 </CardContent>
                 <CardActions>

@@ -36,7 +36,10 @@ function Index({ user }) {
                 if (breedPicData) {
                     breed.url = breedPicData.url;
                 }
+                console.log(breed)
                 return breed;
+
+                
             });
 
             const breedsWithUrls = await Promise.all(breedPromises);
