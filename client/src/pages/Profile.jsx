@@ -28,16 +28,17 @@ export default function Profile() {
                 }
             });
             const favsData = response.data;
-    
-            const favInfoData = [];
-    
-            for (const fav of favsData) {
+
+            // Fetch breed info for each fav
+            const favInfoPromises = favsData.map(async (fav) => {
                 const favInfoResponse = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${fav.breed}`, {
                     headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API },
                 });
                 const favInfo = favInfoResponse.data[0];
-                favInfoData.push({ fav, favInfo }); // Combine fav and favInfo into an object
-            };
+                return { fav, favInfo }; // Combine fav and favInfo into an object
+            });
+
+            const favInfoData = await Promise.all(favInfoPromises);
 
             setFavs(favInfoData); // Set favs as the combined array of fav and favInfo objects
 

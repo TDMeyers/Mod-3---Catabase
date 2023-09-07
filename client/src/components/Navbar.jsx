@@ -56,8 +56,8 @@ function Navbar() {
             { label: 'Profile', path: '/profile' },
             { label: 'Sign out', onClick: logout }
         ]
-        : [{ label: 'Register', path: '/cats/register' },
-        { label: 'Login', path: '/cats/Login' }
+        : [{ label: 'Register', path: '/register' },
+        { label: 'Login', path: '/login' }
         ]
 
     return (
@@ -182,7 +182,9 @@ function Navbar() {
                             onClose={handleCloseUserMenu}
                         >
                             {settingsLinks.map((setting, index) => (
-                                <MenuItem key={index} onClick={setting.onClick || handleCloseUserMenu} >
+                                // <MenuItem key={index} onClick={setting.onClick || handleCloseUserMenu} >
+                                <MenuItem key={index} onClick={setting.onClick} >
+
                                     <Typography textAlign="center" component={Link} to={setting.path}>{setting.label}</Typography>
                                 </MenuItem>
                             ))}
