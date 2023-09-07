@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import axios from "../../api";
 import Mediacard from "../../components/Mediacard"
 import Grid from '@mui/material/Grid'; // Grid version 1
 import { Typography } from "@mui/material";

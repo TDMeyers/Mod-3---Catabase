@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import axios from "axios";
+// import axios from "axios";
+import axios from "../../src/api";
 import { SavedCard } from '../components/Savedcard';
 import Grid from '@mui/material/Grid'; // Grid version 1
 import { Typography } from "@mui/material";
@@ -17,8 +18,6 @@ export default function Profile() {
     const [isLoading, setIsLoading] = useState(true);
     const [deleteSuccessOpen, setDeleteSuccessOpen] = useState(false);
     const [deleteErrorOpen, setDeleteErrorOpen] = useState(false);
-    const nameRef = useRef();
-    const ageRef = useRef();
 
     async function getFavsAndInfo() {
         try {
@@ -46,8 +45,8 @@ export default function Profile() {
             console.log(err);
         } finally {
             setIsLoading(false);
-        };
-    };
+        }
+    }
 
     async function handleDeleteFav(favId) {
         try {
@@ -66,8 +65,8 @@ export default function Profile() {
         } catch (err) {
             console.log(err);
             setDeleteErrorOpen(true);
-        };
-    };
+        }
+    }
 
     const darkTheme = createTheme({
         palette: {
@@ -80,7 +79,7 @@ export default function Profile() {
             // Only fetch favs if favs array is empty
             getFavsAndInfo();
         }
-    }, []); // Add an empty dependency array to ensure this effect runs only once
+    }, [favs]); // Add an empty dependency array to ensure this effect runs only once
 
     return (
         <ThemeProvider theme={darkTheme}>
