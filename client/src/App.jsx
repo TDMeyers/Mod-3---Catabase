@@ -18,8 +18,6 @@ function App() {
 
   const user = useSelector((state) => state.user)
 
-  console.log('this is user', user)
-
   const dispatch = useDispatch();
 
   const [isLoading, setIsLoading] = useState(true)

@@ -30,6 +30,7 @@ function Login() {
     const navigate = useNavigate()
 
     let [form, setForm] = useState(emptyForm)
+    const [isShown, setIsSHown] = useState(false);
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value })
@@ -111,6 +112,7 @@ function Login() {
                             id="password"
                             name="password"
                             label="password"
+                            type={isShown ? "text" : "password"}
                             value={form.password}
                             onChange={handleChange}
                             placeholder="Password"
