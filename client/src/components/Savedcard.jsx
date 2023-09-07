@@ -41,7 +41,7 @@ export function SavedCard({ breed, pic, onDelete, onUpdate, deleteSuccessOpen, s
             <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                     sx={{ height: 140 }}
-                    image={pic.url || "/placeholder-image.jpg"}
+                    image={pic.url || "https://placekitten.com/345/140"}
                     title={breed.name}
                 />
                 <CardContent>

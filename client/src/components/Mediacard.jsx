@@ -36,7 +36,7 @@ function MediaCard({ breed }) {
             <Card sx={{ maxWidth: 345 }}>
                 <CardMedia
                     sx={{ height: 140 }}
-                    image={breed.url || "/placeholder-image.jpg"} // You can use a placeholder image if breed.url is not available
+                    image={breed.url || "https://placekitten.com/345/140"} // placeholder image if breed.url is not available
                     title={breed.name}
                 />
                 <CardContent>

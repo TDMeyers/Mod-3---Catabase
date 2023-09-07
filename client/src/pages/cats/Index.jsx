@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid'; // Grid version 1
 import { Typography } from "@mui/material";
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { green, purple } from '@mui/material/colors';
 import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
 
@@ -70,6 +71,12 @@ function Index({ user }) {
     const darkTheme = createTheme({
         palette: {
             mode: 'dark',
+            primary: {
+                main: purple[500],
+            },
+            secondary: {
+                main: green[500],
+            },
         },
     });
 
@@ -85,22 +92,22 @@ function Index({ user }) {
                         alignItems: 'center',
                     }}
                 >
-            <Typography variant="h4" gutterBottom>
-                Cats! Cats! Cats! 
-            </Typography> 
-            <Grid container spacing={2} justifyContent="center" >
-                {isLoading ? (
-                    <p>Loading...</p>
-                ) : (
-                    breeds.map((breed, index) => (
-                        <Grid item xs={4} key={index}>
-                        <Mediacard breed={breed} key={breed.id} />
-                        </Grid>
-                    ))
-                )}
-            </Grid>
-            </Box>
-        </Container>
+                    <Typography variant="h4" gutterBottom>
+                        Cats! Cats! Cats!
+                    </Typography>
+                    <Grid container spacing={2} justifyContent="center" >
+                        {isLoading ? (
+                            <p>Loading...</p>
+                        ) : (
+                            breeds.map((breed, index) => (
+                                <Grid item xs={4} key={index}>
+                                    <Mediacard breed={breed} key={breed.id} />
+                                </Grid>
+                            ))
+                        )}
+                    </Grid>
+                </Box>
+            </Container>
         </ThemeProvider>
     );
 }
