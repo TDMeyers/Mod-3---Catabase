@@ -55,11 +55,30 @@ export default function Profile() {
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             });
-
-            // Update the state by filtering out the deleted item based on favId
-            setFavs((prevFavs) => prevFavs.filter((fav) => fav._id !== favId));
-            
-
+    
+            // Fetch updated favs data after deletion
+            const response = await axios.get("/api/cats", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            });
+    
+            const favsData = response.data;
+    
+            // Fetch breed info for each fav
+            const favInfoPromises = favsData.map(async (fav) => {
+                const favInfoResponse = await axios.get(`https://api.thecatapi.com/v1/images/search?breed_ids=${fav.breed}`, {
+                    headers: { "x-api-key": import.meta.env.VITE_APP_THE_CAT_API },
+                });
+                const favInfo = favInfoResponse.data[0];
+                return { fav, favInfo }; // Combine fav and favInfo into an object
+            });
+    
+            const favInfoData = await Promise.all(favInfoPromises);
+    
+            // Update the state with the updated data
+            setFavs(favInfoData);
+    
             // Update state to call upon the snackbar
             setDeleteSuccessOpen(true);
         } catch (err) {
@@ -103,8 +122,8 @@ export default function Profile() {
                         {isLoading ? (
                             <p>Loading...</p>
                         ) : (
-                            favs.map(({ fav, favInfo }, index) => (
-                                <Grid item xs={4} key={index}>
+                            favs.map(({ fav, favInfo }) => (
+                                <Grid item xs={4} key={fav._id}>
                                     <SavedCard
                                         breed={fav}
                                         pic={favInfo}
